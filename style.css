@@ -21,6 +21,15 @@
 
 }
 
+body.dark-theme {
+    --color-card: #13131A;
+    --color-input: #1C1C26;
+    --color-text: #FFFFFF;
+    --color-placeholder: #8C8CA1;
+    --color-border: #2D2D3B;
+    background: linear-gradient(#09090E, #13131A);
+}
+
 body {
     display: flex; /* Use Flexbox to center content */
     align-items: center; /* Center content vertically */
