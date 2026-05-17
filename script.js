@@ -50,10 +50,11 @@ promptForm.addEventListener("submit", (e) => {
     // Grab exactly what the user typed and selected
     const promptText = document.querySelector(".prompt-input").value;
 
-    // We grab all the selects. [0] is the model, [1] is the count.
+    // We grab all the selects. [0] is the model, [1] is the count, [2] is aspect ratio!
     const selects = document.querySelectorAll(".custom-select");
     const selectedModel = selects[0].value;
     const imageCount = parseInt(selects[1].value);
+    const aspectRatio = selects[2].value; // <--- TAMBAH NI UNTUK AMBIK SAIZ GAMBAR
 
     // Clear out the dummy images currently sitting in the HTML gallery
     galleryGrid.innerHTML = "";
@@ -127,4 +128,6 @@ promptForm.addEventListener("submit", (e) => {
             }
         }
     };
+
+    generateImages(selectedModel, imageCount, aspectRatio, promptText);
 });
