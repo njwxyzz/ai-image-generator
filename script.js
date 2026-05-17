@@ -86,5 +86,45 @@ promptForm.addEventListener("submit", (e) => {
     // Temporary console log to prove it's grabbing the right data
     console.log(`Ready to send: "${promptText}" to the ${selectedModel} model. Generating ${imageCount} images!`);
 
-    // NOTE: The actual API call will go right here next!
+
+    // =========================================
+    // THE FETCH FUNCTION (Talking to the AI)
+    // =========================================
+    const generateImages = async (selectedModel, imageCount, aspectRatio, promptText) => {
+        // 1. Grab all the loading cards we just created
+        const loadingCards = document.querySelectorAll(".img-card.loading");
+
+        // 2. loop through each card and send a request to our backend for each one
+        for (let i = 0; i < imageCount; i++) {
+            const currentCard = loadingCards[i];
+
+            try {
+                // Send the prompt and model info to our backend API route
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        model: selectedModel, 
+                        promptText: promptText 
+                    })
+                });
+
+                if (!response.ok) throw new Error("Gagal generate gambar");
+
+                // Hugging Face will send back the generated image as binary data, so we need to convert it to a format we can use in the frontend
+                const blob = await response.blob();
+                const imageUrl = URL.createObjectURL(blob);
+
+                // Update the current card to show the generated image instead of the loading state
+                currentCard.classList.remove("loading");
+                currentCard.querySelector(".result-img").src = imageUrl;
+
+            } catch (error) {
+                console.error(error);
+                // if fail, remove the loading spinner and show an error message on the card
+                currentCard.classList.remove("loading");
+                currentCard.classList.add("error");
+            }
+        }
+    };
 });
